@@ -1,0 +1,105 @@
+/**
+ * AutorisationTransfertFonds entity.
+ * @author Sanda.
+ *   Le type comprendra tous les produits
+ * qu'offre un corps précis de métier
+    - Banque
+    - assurance
+    - soins medicaux etc
+ *   RELATION  
+ * OneToMany avec Facturation
+ * OneToMany avec PrixProduitProfessionel
+ */
+entity ProduitProfessionnel {
+   produitBancaire String
+   type Integer 
+}
+/**
+ * Marche entity.
+ * @author Sanda.
+ *     Cette table liste les déclarations 
+ *     existente ainsi que la recurrence des 
+ *     déclarations à laquelle elles sont soumises
+ *     RELATION
+ *         OneToMany avec ProduitBancaire
+ *         OneToMany avec Contribuable
+ */
+entity PrixServiceProfessionel {
+    coefFacturation Double
+    ordonneeBase Double
+}
+/**
+ * Heritage entity.
+ * @author Sanda.
+ *    Relation
+ * ManyToOne avec Contribuable
+ */
+entity AbonneParProduit {
+    nombreAbonne Double
+}
+/**
+ * Taf entity.
+ * @author Sanda.
+ *    Cette table permet de categoriser les 
+ *    differentes impositions existant
+ *    RELATION
+ *  OneToMany avec PrixServiceProfessionel
+ *  ManyToOne avec Contribuable
+ *  ManyToOne avec InfoDeclaration
+ *  ManyToOne avec Adresse
+ */
+entity Taf {
+    produitBancaire Double
+}
+/**
+ * SommeEncaisse entity.
+ * @author Sanda.
+ *    Cette table permet de categoriser les 
+ *    differentes impositions existant
+ *    RELATION
+ *  ManyToOne avec Marche
+ *  ManyToOne avec Contribuable
+ *  ManyToOne avec InfoDeclaration
+ *  ManyToOne avec Adresse
+ */
+entity Tca {
+    produitAssurance Double
+}
+/**
+ * One to many relationship.
+ */
+relationship OneToMany {
+    ProduitProfessionnel to PrixServiceProfessionel
+} 
+/**
+ * One to many relationship.
+ */
+relationship OneToMany {
+    Tca to PrixServiceProfessionel
+}
+relationship OneToMany {
+    User to Taf
+}
+relationship OneToMany {
+    User to Tca 
+}
+/**
+ * One to many relationship.
+ */
+relationship OneToMany {
+    Taf to PrixServiceProfessionel
+}
+
+relationship ManyToOne {
+    PrixServiceProfessionel to ProduitProfessionnel
+}
+
+// Set pagination options
+paginate JobHistory, Employee with infinite-scroll
+paginate Job with pagination
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+// Set an angular suffix
+// angularSuffix * with mySuffix
