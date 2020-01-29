@@ -1,0 +1,78 @@
+
+enum TypeDeduction {
+	NON_IMMOBILISATION, IMMOBILISATION
+}
+/**
+ * ConversionUnite entity.
+ * @author sanda
+ *     methode
+ *         - Calcul du total hors tva (06)
+ *         - Tva brute de 18% (09)
+ *         - Tva au taux de (10)
+ *         - Credit de Tva reporté du mois précédent (13)
+ *         - Tva brute (19)
+ *         - Tva déductible (21)
+ *         - Tva nette à payer (22)
+ *     relation
+ */
+entity DonneeTva {
+	opExonere Double
+    exportTaxble Double
+    exportNonTaxble Double
+    opTaxableDixHuit Double
+    opTaxableDe Double
+    livraiSoiMemeDixHuit Double
+    livraiSoiMemeDe Double
+    prorataDeduct Double
+    deductNonImmo Double
+    deductImmo Double
+    dedComplement Double
+    reversCompl Double
+}
+/** 
+ * ConversionUnite entity.
+ * @author sanda
+ *  methode
+ *     - verification en le nom mis et le nom correspondant à la base de données
+ *  relation
+ */
+entity DetailDeduction {
+	typeDeduction TypeDeduction
+    nif Long
+    nomFournisseur String
+    natureImmo String
+    prixRevient Double
+    tvaPayee Double
+    tvaDeductible Double
+}
+/**
+ * ConversionUnite entity.
+ * @author sanda
+ *     relation
+ *     - OneToMany avec DetailDeduction
+ *     - ManyToOne avec EnteteDeduction
+ */
+entity EnteteDeduction {
+	prorata Double
+}
+/**
+ * One to many relationship.
+ */
+relationship OneToMany {
+	DonneeTva to DetailDeduction
+}
+relationship OneToMany {
+	EnteteDeduction to DetailDeduction
+}
+relationship OneToMany {
+	EnteteDeclaration to DonneeTva
+}
+// Set pagination options
+paginate DetailDeduction with infinite-scroll
+paginate DonneeTva with pagination
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+// Set service options to all except few
+service all with serviceImpl except Contact, SiteWeb
+// Set an angular suffix
+// angularSuffix * with mySuffix
